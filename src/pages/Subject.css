@@ -1,0 +1,159 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  /* background: linear-gradient(135deg, #dbeafe, #01162e, #e0f2fe); */
+/* Dark blue but a bit lighter, same family as card */
+background: linear-gradient(135deg, var(--ink-900) 0%, var(--blue-800) 40%, var(--mist-50) 100%);
+
+  min-height: 100vh;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+}
+
+/* ---------------- Container Card ---------------- */
+
+.stem-container {
+  margin: 40px auto;  /* auto left/right => center */
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-radius: 20px;
+  padding: 40px;
+  width: 85%;
+  max-width: 900px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+
+
+/* Decorative gradient border effect */
+.stem-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 2px;
+  background: linear-gradient(135deg, #2563eb, #3b82f6, #06b6d4);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ---------------- Heading ---------------- */
+.stem-container h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #2563eb, #3b82f6, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* ---------------- Control Blocks ---------------- */
+.control-block {
+  margin: 22px 0;
+  text-align: left;
+}
+
+.control-block label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1e293b;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Dropdown Select */
+.control-block select {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  background: #f9fafb;
+  color: #1e293b;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: 0.3s ease;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.control-block select:hover {
+  background: #f1f5f9;
+  border-color: #3b82f6;
+  transform: scale(1.02);
+}
+
+.control-block select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+/* ---------------- Game / Material Section ---------------- */
+.game-area {
+  margin-top: 35px;
+  padding: 25px 20px;
+  border-radius: 16px;
+  background: rgba(239, 246, 255, 0.9);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.15);
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.game-area h2 {
+  font-size: 1.4rem;
+  color: #1e40af;
+  margin-bottom: 12px;
+}
+
+.game-area p {
+  font-size: 1rem;
+  color: #334155;
+  margin-bottom: 18px;
+}
+
+/* Styled link as button */
+.subject-card {
+  display: inline-block;
+  padding: 12px 26px;
+  font-weight: 600;
+  color: #fff;
+  border-radius: 12px;
+  text-decoration: none;
+  background: linear-gradient(135deg, #2563eb, #3b82f6, #06b6d4);
+  background-size: 250% 250%;
+  transition: all 0.35s ease-in-out;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+}
+
+.subject-card:hover {
+  transform: translateY(-3px) scale(1.05);
+  background-position: 100% 0;
+  box-shadow: 0 10px 25px rgba(59,130,246,0.35);
+}
+
+.subject-card:active {
+  transform: scale(0.97);
+}
+
+/* ---------------- Animations ---------------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
