@@ -1,0 +1,311 @@
+/* ================== Base ================== */
+/* @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap'); */
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Orbitron', sans-serif;
+  background: #051014;
+  color: #0ff;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-top: 50px;
+}
+
+/* Motion safety */
+@media (prefers-reduced-motion: reduce){
+  * { animation: none !important; transition: none !important; }
+}
+
+/* ================== Global Utilities ================== */
+.flex-center { display: flex; justify-content: center; align-items: center; }
+.rounded { border-radius: 12px; }
+.mt-1 { margin-top: 1rem; }
+.mb-1 { margin-bottom: 1rem; }
+.p-1  { padding: 1rem; }
+
+/* ================== Neon/Glassy Tokens ================== */
+:root{
+  --neon:#00fff0;
+  --glassy-bg: rgba(0,0,0,0.4);
+  --glassy-strong: rgba(10,10,20,0.9);
+  --shadow-soft: 0 0 20px rgba(0,255,255,0.30);
+  --shadow-strong: 0 0 30px rgba(0,255,255,0.45);
+}
+
+/* ================== Glassy Surfaces ================== */
+.glassy,
+.neon-glass,
+.glassy-card,
+.start-card,
+.modal-content {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: var(--glassy-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  color: var(--neon);
+}
+
+/* Specific tweaks per component */
+.glassy { transition: all .2s ease; }
+.glassy-card{
+  padding: 1.5rem;
+  margin: 1rem 0;
+  border-radius: 16px;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.glassy-card:hover{
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-strong);
+}
+.start-card{
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10; padding: 2rem; border-radius: 16px;
+  box-shadow: var(--shadow-strong);
+  text-align: center;
+}
+.modal-content{
+  background: var(--glassy-strong);
+  border-radius: 16px; padding: 2rem;
+  box-shadow: var(--shadow-strong);
+  max-width: 500px; width: 90%; text-align: center;
+}
+.modal-backdrop{
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(6px);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 1000;
+}
+
+/* ================== Navbar ================== */
+.glassy-nav{
+  position: fixed; top: 0; left: 0; width: 100%;
+  padding: 1rem 2rem; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 25px rgba(0,255,255,0.3);
+}
+
+/* ================== Buttons ================== */
+.btn-neon,
+.btn-neon-level{
+  padding: 0.6rem 1.5rem;
+  border: 2px solid var(--neon);
+  background: rgba(0,0,0,0.25);
+  color: var(--neon);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-shadow: 0 0 6px var(--neon);
+  border-radius: 8px;
+  box-shadow: 0 0 10px var(--neon);
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, filter .2s ease;
+}
+.btn-neon:hover,
+.btn-neon-level:hover{
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 0 20px var(--neon), 0 0 40px var(--neon) inset;
+  background: rgba(0,0,0,0.4);
+}
+.btn-neon:active,
+.btn-neon-level:active{
+  transform: scale(0.98);
+}
+
+/* Level variants */
+.btn-neon-level.easy   { background: rgba(0,255,255,0.10); }
+.btn-neon-level.medium { background: rgba(0,200,255,0.10); }
+.btn-neon-level.hard   { background: rgba(0,150,255,0.10); }
+
+/* Disabled state */
+button[disabled].btn-neon,
+button[disabled].btn-neon-level{
+  opacity: .6; cursor: not-allowed; box-shadow: none; transform: none;
+}
+
+/* ================== Text Glow ================== */
+.neon-text{
+  color: var(--neon);
+  text-shadow: 0 0 6px var(--neon), 0 0 14px var(--neon);
+}
+
+/* ================== Game Canvas ================== */
+.game-root{ position: relative; width: 100%; height: 100%; overflow: hidden; }
+.game-canvas{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; display: block;
+  background: #000; z-index: 0;
+}
+
+/* ================== Rules/Info Panel ================== */
+.rules-panel p { font-size: 14px; line-height: 1.4; color: var(--neon); }
+
+/* ================== Microinteractions ================== */
+/* Neon pulse for primary CTAs (gentle) */
+@keyframes neonPulse { 
+  0%,100% { box-shadow: 0 0 10px var(--neon); } 
+  50%     { box-shadow: 0 0 18px var(--neon); } 
+}
+.btn-neon.primary {
+  animation: neonPulse 2.8s ease-in-out infinite;
+}
+
+/* Card fade-in on mount (for lists/grids) */
+@keyframes fadeUp { from{ opacity:0; transform: translateY(14px); } to{ opacity:1; transform:none; } }
+.glassy-card.appear { animation: fadeUp .5s ease forwards; }
+
+/* ================== Responsive ================== */
+@media (max-width: 768px){
+  .btn-neon, .btn-neon-level { padding: 0.5rem 1rem; font-size: .9rem; }
+  .modal-content, .start-card { padding: 1.5rem; }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ===== Spacing scale ===== */
+:root{
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+}
+
+/* ===== Margin utils ===== */
+.m-0{ margin:0 !important; }
+.m-1{ margin:var(--space-1) !important; }
+.m-2{ margin:var(--space-2) !important; }
+.m-3{ margin:var(--space-3) !important; }
+.m-4{ margin:var(--space-4) !important; }
+.m-5{ margin:var(--space-5) !important; }
+.m-6{ margin:var(--space-6) !important; }
+.m-8{ margin:var(--space-8) !important; }
+
+.mt-0{ margin-top:0 !important; }
+.mt-1{ margin-top:var(--space-1) !important; }
+.mt-2{ margin-top:var(--space-2) !important; }
+.mt-3{ margin-top:var(--space-3) !important; }
+.mt-4{ margin-top:var(--space-4) !important; }
+.mt-5{ margin-top:var(--space-5) !important; }
+.mt-6{ margin-top:var(--space-6) !important; }
+.mt-8{ margin-top:var(--space-8) !important; }
+
+.mb-0{ margin-bottom:0 !important; }
+.mb-1{ margin-bottom:var(--space-1) !important; }
+.mb-2{ margin-bottom:var(--space-2) !important; }
+.mb-3{ margin-bottom:var(--space-3) !important; }
+.mb-4{ margin-bottom:var(--space-4) !important; }
+.mb-5{ margin-bottom:var(--space-5) !important; }
+.mb-6{ margin-bottom:var(--space-6) !important; }
+.mb-8{ margin-bottom:var(--space-8) !important; }
+
+.ms-0{ margin-left:0 !important; }
+.ms-1{ margin-left:var(--space-1) !important; }
+.ms-2{ margin-left:var(--space-2) !important; }
+.ms-3{ margin-left:var(--space-3) !important; }
+.ms-4{ margin-left:var(--space-4) !important; }
+.ms-5{ margin-left:var(--space-5) !important; }
+.ms-6{ margin-left:var(--space-6) !important; }
+.ms-8{ margin-left:var(--space-8) !important; }
+
+.me-0{ margin-right:0 !important; }
+.me-1{ margin-right:var(--space-1) !important; }
+.me-2{ margin-right:var(--space-2) !important; }
+.me-3{ margin-right:var(--space-3) !important; }
+.me-4{ margin-right:var(--space-4) !important; }
+.me-5{ margin-right:var(--space-5) !important; }
+.me-6{ margin-right:var(--space-6) !important; }
+.me-8{ margin-right:var(--space-8) !important; }
+
+.mx-auto{ margin-left:auto !important; margin-right:auto !important; }
+.mx-0{ margin-left:0 !important; margin-right:0 !important; }
+.mx-2{ margin-left:var(--space-2) !important; margin-right:var(--space-2) !important; }
+.mx-4{ margin-left:var(--space-4) !important; margin-right:var(--space-4) !important; }
+
+.my-0{ margin-top:0 !important; margin-bottom:0 !important; }
+.my-2{ margin-top:var(--space-2) !important; margin-bottom:var(--space-2) !important; }
+.my-4{ margin-top:var(--space-4) !important; margin-bottom:var(--space-4) !important; }
+
+/* ===== Padding utils ===== */
+.p-0{ padding:0 !important; }
+.p-1{ padding:var(--space-1) !important; }
+.p-2{ padding:var(--space-2) !important; }
+.p-3{ padding:var(--space-3) !important; }
+.p-4{ padding:var(--space-4) !important; }
+.p-5{ padding:var(--space-5) !important; }
+.p-6{ padding:var(--space-6) !important; }
+.p-8{ padding:var(--space-8) !important; }
+
+.pt-0{ padding-top:0 !important; }
+.pt-2{ padding-top:var(--space-2) !important; }
+.pt-4{ padding-top:var(--space-4) !important; }
+.pt-6{ padding-top:var(--space-6) !important; }
+.pt-8{ padding-top:var(--space-8) !important; }
+
+.pb-0{ padding-bottom:0 !important; }
+.pb-2{ padding-bottom:var(--space-2) !important; }
+.pb-4{ padding-bottom:var(--space-4) !important; }
+.pb-6{ padding-bottom:var(--space-6) !important; }
+.pb-8{ padding-bottom:var(--space-8) !important; }
+
+.ps-0{ padding-left:0 !important; }
+.ps-2{ padding-left:var(--space-2) !important; }
+.ps-4{ padding-left:var(--space-4) !important; }
+.ps-6{ padding-left:var(--space-6) !important; }
+
+.pe-0{ padding-right:0 !important; }
+.pe-2{ padding-right:var(--space-2) !important; }
+.pe-4{ padding-right:var(--space-4) !important; }
+.pe-6{ padding-right:var(--space-6) !important; }
+
+.px-0{ padding-left:0 !important; padding-right:0 !important; }
+.px-2{ padding-left:var(--space-2) !important; padding-right:var(--space-2) !important; }
+.px-4{ padding-left:var(--space-4) !important; padding-right:var(--space-4) !important; }
+
+.py-0{ padding-top:0 !important; padding-bottom:0 !important; }
+.py-2{ padding-top:var(--space-2) !important; padding-bottom:var(--space-2) !important; }
+.py-4{ padding-top:var(--space-4) !important; padding-bottom:var(--space-4) !important; }
+
+/* ===== Component defaults (non-breaking) ===== */
+/* Navbar breathing room */
+.glassy-nav { padding-top: var(--space-3); padding-bottom: var(--space-3); }
+
+/* Modal spacing */
+.modal-content { padding: var(--space-6); }
+.modal-content .btn { margin-top: var(--space-3); }
+
+/* Stage container spacing */
+.game-stage { margin-top: 72px; } /* prevent overlap with fixed navbar */
+
+/* HUD badges gap (if not using Bootstrap gap classes) */
+.hud-gap > * + * { margin-left: var(--space-3); }
+
+/* Card stacks */
+.stack > * + * { margin-top: var(--space-3); }
+
+/* ===== Responsive variants ===== */
+@media (min-width: 768px){
+  .md-mt-6{ margin-top: var(--space-6) !important; }
+  .md-p-6{ padding: var(--space-6) !important; }
+}
+@media (min-width: 992px){
+  .lg-mt-8{ margin-top: var(--space-8) !important; }
+  .lg-p-8{ padding: var(--space-8) !important; }
+}

@@ -1,7 +1,7 @@
 // PhysicsGame.jsx
 import React, { useRef, useEffect, useState, useMemo } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./Game.css";
+import "./Math.css";
 
 
 
