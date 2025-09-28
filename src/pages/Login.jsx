@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
-function LoginForm() {
+function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "", role: "" });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -10,25 +12,47 @@ function LoginForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Email: ${form.email}\nPassword: ${form.password}\nRole: ${form.role}`);
+
+    if (!form.role) {
+      alert("Please select a role");
+      return;
+    }
+
+    // Save role to localStorage
+    localStorage.setItem("role", form.role);
+
+    // 🔹 Dispatch custom event so Navbar updates instantly
+    window.dispatchEvent(new Event("roleChange"));
+
+    // Redirect based on role
+    if (form.role === "student") {
+      navigate("/student-dashboard");
+    } else if (form.role === "teacher") {
+      navigate("/teacher-dashboard");
+    }
   };
 
   return (
     <div className="login-page">
       <div className="login-container">
-
         {/* Left Illustration */}
         <div className="login-illustration">
-          <img src="https://cdn-icons-png.flaticon.com/512/5087/5087579.png" alt="Login Illustration" />
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/5087/5087579.png"
+            alt="Login Illustration"
+          />
           <h3>Learn Without Limits</h3>
-          <p>Join Edu-Tech and access top-quality tutors, live classes, and a global learning community.</p>
+          <p>
+            Join STEM and access top-quality tutors, live classes, and a
+            global learning community.
+          </p>
         </div>
 
         {/* Right Form */}
         <form className="login-card" onSubmit={handleSubmit}>
           <h2 className="login-title">Welcome Back 👋</h2>
           <p className="login-subtitle">
-            Log in to continue your learning journey with <span>Edu-Tech</span>
+            Log in to continue your learning journey with <span>STEM</span>
           </p>
 
           {/* Role */}
@@ -90,4 +114,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default LoginPage;

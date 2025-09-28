@@ -1,159 +1,210 @@
-body {
+/* ===== Global base ===== */
+html, body {
+  padding-top: 60px; /* match navbar height */
   margin: 0;
-  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
   font-family: "Poppins", sans-serif;
-  /* background: linear-gradient(135deg, #dbeafe, #01162e, #e0f2fe); */
-/* Dark blue but a bit lighter, same family as card */
-background: linear-gradient(135deg, var(--ink-900) 0%, var(--blue-800) 40%, var(--mist-50) 100%);
+}
 
+/* ===== Full-bleed background wrapper (gradient overlay + image) ===== */
+.notes-bg {
   min-height: 100vh;
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
+  background:
+    linear-gradient(180deg, rgba(2,8,12,0.35), rgba(2,8,12,0.70)),
+    url("../assets/bgHome.png") center/cover no-repeat;
 }
 
-/* ---------------- Container Card ---------------- */
+/* ===== Notes page card (single definition; no duplicates) ===== */
+.notes-page {
+  position: relative;
 
-.stem-container {
-  margin: 40px auto;  /* auto left/right => center */
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  /* Light card on top of the full-bleed bg */
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 1rem clamp(20px, 4vw, 48px);
+  padding-top: 20px;
+
+  color: #1b1b1b;
+  background: linear-gradient(135deg, #f5f7f4, #e9f1eb);
   border-radius: 20px;
-  padding: 40px;
-  width: 85%;
-  max-width: 900px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  text-align: center;
-  animation: fadeIn 1.2s ease-in-out;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-
-
-/* Decorative gradient border effect */
-.stem-container::before {
+/* ===== Animated mist stays above background, below content ===== */
+.notes-page::before,
+.notes-page::after {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  padding: 2px;
-  background: linear-gradient(135deg, #2563eb, #3b82f6, #06b6d4);
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
+  width: 250%;
+  height: 250%;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(circle, rgba(46,125,50,0.07) 20%, transparent 60%);
+  animation: drift 25s infinite linear;
+  z-index: 0;
+}
+.notes-page::after {
+  animation-direction: reverse;
+  animation-duration: 40s;
+}
+@keyframes drift {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(20%, 20%) rotate(360deg); }
 }
 
-/* ---------------- Heading ---------------- */
-.stem-container h1 {
-  font-size: 2.2rem;
-  font-weight: 700;
-  background: linear-gradient(90deg, #2563eb, #3b82f6, #06b6d4);
+/* Content above mist */
+.notes-page > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== Title with pulse glow ===== */
+.title {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(90deg, #2e7d32, #1b5e20, #6d4c41);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  animation: shine 6s linear infinite, pulse 3s infinite ease-in-out;
+  background-size: 200% auto;
+}
+@keyframes shine {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@keyframes pulse {
+  0%, 100% { text-shadow: 0 0 0px rgba(46,125,50,0.6); }
+  50% { text-shadow: 0 0 16px rgba(46,125,50,0.5); }
 }
 
-/* ---------------- Control Blocks ---------------- */
-.control-block {
-  margin: 22px 0;
-  text-align: left;
-}
-
-.control-block label {
-  font-weight: 600;
-  font-size: 1rem;
-  color: #1e293b;
-  display: block;
-  margin-bottom: 10px;
-}
-
-/* Dropdown Select */
-.control-block select {
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 1px solid #d1d5db;
-  outline: none;
-  background: #f9fafb;
-  color: #1e293b;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: 0.3s ease;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-}
-
-.control-block select:hover {
-  background: #f1f5f9;
-  border-color: #3b82f6;
-  transform: scale(1.02);
-}
-
-.control-block select:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
-}
-
-/* ---------------- Game / Material Section ---------------- */
-.game-area {
-  margin-top: 35px;
-  padding: 25px 20px;
+/* ===== Step Card with subtle 3D hover ===== */
+.card {
+  background: rgba(255, 255, 255, 0.96);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  backdrop-filter: saturate(140%) blur(8px);
+  padding: 1.6rem;
   border-radius: 16px;
-  background: rgba(239, 246, 255, 0.9);
-  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.15);
-  animation: fadeIn 0.8s ease-in-out;
+  margin-bottom: 1.8rem;
+  border: 1px solid #dfe4dd;
+  box-shadow: 0 6px 16px rgba(27, 43, 25, 0.06);
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+  animation: fadeUp 0.6s ease forwards;
+  opacity: 0;
+}
+.card:hover {
+  transform: rotateX(4deg) rotateY(-4deg) scale(1.02);
+  box-shadow: 0 14px 28px rgba(27, 43, 25, 0.15);
+}
+@keyframes fadeUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-.game-area h2 {
-  font-size: 1.4rem;
-  color: #1e40af;
-  margin-bottom: 12px;
-}
-
-.game-area p {
-  font-size: 1rem;
-  color: #334155;
-  margin-bottom: 18px;
-}
-
-/* Styled link as button */
-.subject-card {
-  display: inline-block;
-  padding: 12px 26px;
+/* ===== Form elements ===== */
+.step label {
+  display: block;
+  margin-bottom: 0.6rem;
   font-weight: 600;
-  color: #fff;
+  font-size: 1.1rem;
+  color: #2e4628;
+}
+.step select {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid #cbd5c0;
   border-radius: 12px;
+  font-size: 1rem;
+  background: #f9faf7;
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+}
+.step select:focus {
+  border-color: #2e7d32;
+  outline: none;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.2);
+  transform: scale(1.03);
+}
+
+/* ===== Download box & buttons ===== */
+.download-box {
+  text-align: center;
+  padding: 2rem;
+}
+
+/* If using Bootstrap .btn too, this selector wins via scope + class stacking */
+.notes-page .download-btn,
+.notes-page .btn.download-btn {
+  display: inline-block;
+  padding: 1rem 2.4rem;
+  background: linear-gradient(90deg, #2e7d32, #388e3c, #6d4c41);
+  background-size: 200% auto;
+  color: #fff;
+  border: 1px solid #2e7d32;
+  border-radius: 14px;
+  font-size: 1.2rem;
   text-decoration: none;
-  background: linear-gradient(135deg, #2563eb, #3b82f6, #06b6d4);
-  background-size: 250% 250%;
-  transition: all 0.35s ease-in-out;
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+  font-weight: 600;
+  box-shadow: 0 6px 14px rgba(46, 125, 50, 0.25);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+.notes-page .download-btn::before,
+.notes-page .btn.download-btn::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -75%;
+  width: 50%; height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.4), rgba(255,255,255,0));
+  transform: skewX(-20deg);
+  animation: shimmer 2.5s infinite;
+}
+@keyframes shimmer {
+  0% { left: -75%; }
+  100% { left: 125%; }
+}
+.notes-page .download-btn:hover,
+.notes-page .btn.download-btn:hover {
+  transform: scale(1.07);
+  filter: brightness(1.05);
 }
 
-.subject-card:hover {
-  transform: translateY(-3px) scale(1.05);
-  background-position: 100% 0;
-  box-shadow: 0 10px 25px rgba(59,130,246,0.35);
+/* Back button */
+.back-btn {
+  text-decoration: none;
+  color: #2e7d32;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 1px solid #2e7d32;
+  padding: 8px 16px;
+  border-radius: 10px;
+  transition: all 0.25s ease;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+.back-btn:hover {
+  background: #2e7d32;
+  color: #fff;
+  transform: translateY(-2px);
 }
 
-.subject-card:active {
-  transform: scale(0.97);
+/* ===== Optional: motion safety ===== */
+@media (prefers-reduced-motion: reduce){
+  * { animation: none !important; transition: none !important; }
 }
 
-/* ---------------- Animations ---------------- */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(25px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+
+
+.notes-page .download-btn[disabled] {
+  pointer-events: none;
+  filter: grayscale(0.25) brightness(0.9);
+  box-shadow: none;
+  transform: none;
 }

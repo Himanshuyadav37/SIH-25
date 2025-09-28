@@ -1,11 +1,12 @@
 .login-page {
   position: relative;
   background: linear-gradient(135deg, #eaf4ff, #f5faff);
-  min-height: 100vh;
+  min-height: calc(100vh - 70px); /* subtract navbar height */
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow-y: auto;
+  padding: 2rem 0;
 }
 
 /* Floating background shapes */

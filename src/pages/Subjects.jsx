@@ -1,104 +1,174 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import "./Home.css";
+import React, { useState } from "react";
+import "./Subject.css";
 
-const fallbackDict = {
-  hero_headline: "Gamify Your STEM Learning 🚀",
-  hero_subtitle: "Quests, rewards & progress tracking — all in one futuristic platform.",
-  cta_get_started: "Start Learning",
-  cta_view_rewards: "View Rewards",
-  section_quests: "🔥 Hot Quests Today",
-  link_view_all: "View All Quests",
-  label_estimated_time: "{{mins}} mins",
-  cta_start: "Start Quest",
-  label_offline_ready: "Offline-ready",
+const SUBJECTS = {
+  6: ["Math", "Science"],
+  7: ["Math", "Science"],
+  8: ["Math", "Science"],
+  9: ["Math", "Physics", "Chemistry", "Biology"],
+  10: ["Math", "Physics", "Chemistry", "Biology"],
+  11: ["Math", "Physics", "Chemistry", "Biology"],
+  12: ["Math", "Physics", "Chemistry", "Biology"],
 };
 
-const demoQuests = [
-  { id: "q1", subject: "Math", titleKey: "Fractions Mastery", xp: 50, estMins: 10, offline: true },
-  { id: "q2", subject: "Physics", titleKey: "Motion Basics", xp: 80, estMins: 15, offline: true },
-  { id: "q3", subject: "Chemistry", titleKey: "Atomic Structure", xp: 60, estMins: 12, offline: false },
-];
+// Official NCERT textbook PDF links (examples / partial)
+const RESOURCES = {
+  Math: {
+    English: "https://ncert.nic.in/textbook/pdf/iemh1ps.pdf",
+    Hindi:   "https://ncert.nic.in/textbook/pdf/iemh101.pdf",
+  },
+  Physics: {
+    English: "https://ncert.nic.in/textbook/pdf/iemh112.pdf",
+    Hindi:   "", // not available yet
+  },
+  Chemistry: {
+    English: "", // not available yet
+    Hindi:   "", // not available yet
+  },
+  Biology: {
+    English: "", // not available yet
+    Hindi:   "", // not available yet
+  },
+};
 
-export default function Home() {
-  const { t: i18nT } = useTranslation?.() || {};
+const TEXT = {
+  English: {
+    title: "📘 Download & Read STEM Notes",
+    selectLanguage: "🌐 Select Language:",
+    selectClass: "🏫 Select Class:",
+    selectSubject: "📚 Select Subject:",
+    choose: "--Choose--",
+    download: "⬇ Download Book",
+    preview: "📖 Preview Book",
+    notes: "Notes",
+    backHome: "← Back to Home",
+    classes: "Class",
+    comingSoon: "Resources coming soon for this selection.",
+    notAvailable: "Not available in the selected language.",
+  },
+  Hindi: {
+    title: "📘 STEM नोट्स डाउनलोड व पढ़ें",
+    selectLanguage: "🌐 भाषा चुनें:",
+    selectClass: "🏫 कक्षा चुनें:",
+    selectSubject: "📚 विषय चुनें:",
+    choose: "--चुनें--",
+    download: "⬇ किताब डाउनलोड करें",
+    preview: "📖 पूर्वावलोकन करें",
+    notes: "नोट्स",
+    backHome: "← होम पर वापस जाएं",
+    classes: "कक्षा",
+    comingSoon: "इस चयन के लिए संसाधन जल्द आ रहे हैं।",
+    notAvailable: "चयनित भाषा में उपलब्ध नहीं।",
+  },
+};
 
-  const translate = (key, vars) => {
-    const def = fallbackDict[key] ?? key;
-    if (typeof i18nT === "function") {
-      return i18nT(key, { defaultValue: def, ...(vars || {}) });
-    }
-    let s = def;
-    if (vars) Object.entries(vars).forEach(([k, v]) => { s = s.replace(`{{${k}}}`, String(v)); });
-    return s;
+export default function NotesPage() {
+  const [language, setLanguage] = useState("");
+  const [classLevel, setClassLevel] = useState("");
+  const [subject, setSubject] = useState("");
+
+  const t = language ? TEXT[language] : TEXT.English;
+
+  const getResourceUrl = () => {
+    if (!subject || !language) return "";
+    const sub = RESOURCES[subject];
+    if (!sub) return "";
+    const url = sub[language];
+    return typeof url === "string" && url.trim().length > 0 ? url : "";
   };
 
-  const totalXP = 190, nextLevelXP = 300;
-  const progress = Math.min((totalXP / nextLevelXP) * 100, 100);
+  const resourceUrl = getResourceUrl();
+  const hasSelection = Boolean(subject && language);
+  const hasResource = Boolean(resourceUrl);
 
   return (
-    <div className="home-page full-bleed">
-      {/* Hero Section */}
-      <section className="hero-wrap">
-        <div className="hero-text">
-          <h2 className="hero-title">{translate("hero_headline")}</h2>
-          <p className="hero-subtitle">{translate("hero_subtitle")}</p>
-          <div className="hero-buttons">
-            <Link to="/subject" className="btn btn-glow">{translate("cta_get_started")}</Link>
-            <Link to="/rewards" className="btn btn-outline">{translate("cta_view_rewards")}</Link>
-          </div>
-          <div className="xp-bar">
-            <div className="xp-fill" style={{ width: `${progress}%` }}></div>
-          </div>
-          <p>{totalXP} / {nextLevelXP} XP</p>
+    <div className="notes-bg">
+      <div className="notes-page">
+        <div style={{ marginBottom: "1rem" }}>
+          <a href="/" className="back-btn">{t.backHome}</a>
         </div>
-        <div className="hero-visual">
-          <img src="/assets/hero-graphic.png" alt="STEM Illustration" />
-        </div>
-      </section>
 
-      {/* Quests Section */}
-      <section className="quests-section full-bleed-pad">
-        <div className="quests-header">
-          <h3>{translate("section_quests")}</h3>
-          <Link to="/quiz" className="view-all">{translate("link_view_all")}</Link>
-        </div>
-        <div className="quests-grid">
-          {demoQuests.map((q) => (
-            <article key={q.id} className="quest-card">
-              <div className="quest-tags">
-                <span className="tag subject">{q.subject}</span>
-                {q.offline && <span className="tag offline">{translate("label_offline_ready")}</span>}
-              </div>
-              <h4>{q.titleKey}</h4>
-              <p>⏱ {translate("label_estimated_time", { mins: q.estMins })}</p>
-              <div className="quest-footer">
-                <span>⭐ {q.xp} XP</span>
-                <Link to={`/quiz?quest=${q.id}`} className="btn-sm">{translate("cta_start")}</Link>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+        <h2 className="title">{t.title}</h2>
 
-      {/* Teacher Insights Section */}
-      <section className="teacher-section full-bleed-pad">
-        <div className="teacher-card">
-          <div className="teacher-stat">
-            <h4>120+</h4>
-            <p>Students Tracked</p>
-          </div>
-          <div className="teacher-stat">
-            <h4>85%</h4>
-            <p>Avg. Quest Completion</p>
-          </div>
-          <div className="teacher-stat">
-            <h4>24/7</h4>
-            <p>Real-time Insights</p>
-          </div>
+        {/* Step 1: Language */}
+        <div className="step card">
+          <label>{t.selectLanguage}</label>
+          <select
+            value={language}
+            onChange={(e) => {
+              setLanguage(e.target.value);
+              setClassLevel("");
+              setSubject("");
+            }}
+          >
+            <option value="">{t.choose}</option>
+            <option value="English">English</option>
+            <option value="Hindi">Hindi</option>
+          </select>
         </div>
-      </section>
+
+        {/* Step 2: Class */}
+        {language && (
+          <div className="step card">
+            <label>{t.selectClass}</label>
+            <select
+              value={classLevel}
+              onChange={(e) => {
+                setClassLevel(e.target.value);
+                setSubject("");
+              }}
+            >
+              <option value="">{t.choose}</option>
+              {[6,7,8,9,10,11,12].map((cls) => (
+                <option key={cls} value={cls}>{t.classes} {cls}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Step 3: Subject */}
+        {classLevel && (
+          <div className="step card">
+            <label>{t.selectSubject}</label>
+            <select value={subject} onChange={(e) => setSubject(e.target.value)}>
+              <option value="">{t.choose}</option>
+              {SUBJECTS[classLevel]?.map((subj) => (
+                <option key={subj} value={subj}>{subj}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Step 4: Download / Coming Soon */}
+        {hasSelection && (
+          <div className="download-box card">
+            <h3>{subject} {t.notes} ({language})</h3>
+
+            {hasResource ? (
+              <a
+                href={resourceUrl}
+                className="download-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+              >
+                {t.download}
+              </a>
+            ) : (
+              <div>
+                <p className="muted" style={{ marginBottom: "1rem" }}>
+                  {RESOURCES[subject] && (RESOURCES[subject][language] === "" || RESOURCES[subject][language] == null)
+                    ? t.comingSoon
+                    : t.notAvailable}
+                </p>
+                <button className="download-btn" disabled style={{ opacity: 0.6, cursor: "not-allowed" }}>
+                  {t.download}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
